@@ -1,0 +1,48 @@
+{% extends "partials/navbar.html" %}
+
+{% block content %}
+<h1>Add Your Favorite Bookmarks</h1>
+
+<!-- Search Bar -->
+<!-- <div class="mb-4">
+    <input type="text" id="search-input" placeholder="Search your bookmarks..." class="form-control">
+</div> -->
+
+<!-- Bookmark Adding Form -->
+<div class="mb-4">
+    <h3>Add a Bookmark</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Bookmark</button>
+    </form>
+</div>
+
+<!-- Your Bookmarks -->
+<div>
+    <div id="bookmarks-list">
+        {% if bookmarks %}
+            <div class="row">
+                {% for bookmark in bookmarks %}
+                    
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No bookmarks added yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if messages %}
+    <div class="error">
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+
+{% endblock %}

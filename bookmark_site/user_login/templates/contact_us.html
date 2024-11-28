@@ -1,0 +1,11 @@
+{% extends "partials\navbar.html" %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<p>If you have any questions, comments, or feedback, please fill out the form below, and we'll get back to you as soon as possible.</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Renders the contact form -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

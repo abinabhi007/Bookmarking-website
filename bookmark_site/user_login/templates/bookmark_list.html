@@ -1,0 +1,76 @@
+{% extends "partials\navbar.html" %}
+
+{% block content %}
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination .current {
+        margin: 0 5px;
+        padding: 8px 12px;
+    }
+</style>
+<h1>Search your bookmark here</h1>
+
+<!-- Search Form -->
+<form id="searchForm" method="GET" class="mb-4">
+    <input type="text" name="search" placeholder="Search bookmarks..." value="{{ search_query }}" class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Search</button>
+</form>
+
+<div class="row">
+    {% for bookmark in bookmarks %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ bookmark.title }}</h5>
+                    <a href="{{ bookmark.url }}" class="btn btn-link">Visit</a>
+                    <p class="card-text">Added on: {{ bookmark.added_time }}</p>
+                    
+                    {% if bookmark.user == request.user %}
+                        <a href="{% url 'edit_bookmark' bookmark.id %}" class="btn btn-warning">Edit</a>
+                        <form action="{% url 'delete_bookmark' bookmark.id %}" method="POST" style="display:inline;"  onsubmit="return confirmDelete();">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if bookmarks.has_previous %}
+            <a href="?page=1&search={{ search_query }}">&laquo; first</a>
+            <a href="?page={{ bookmarks.previous_page_number }}&search={{ search_query }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ bookmarks.number }} of {{ bookmarks.paginator.num_pages }}.
+        </span>
+
+        {% if bookmarks.has_next %}
+            <a href="?page={{ bookmarks.next_page_number }}&search={{ search_query }}">next</a>
+            <a href="?page={{ bookmarks.paginator.num_pages }}&search={{ search_query }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
